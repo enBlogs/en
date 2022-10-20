@@ -1,0 +1,500 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Spring核心Ioc和aop | Hexo</title><meta name="keywords" content="Spring"><meta name="author" content="John Doe"><meta name="copyright" content="John Doe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Spring核心Ioc和aop 通过xml文件的方式实现Ioc IoC是 Spring全家桶各个功能模块的基础，创建对象的容器。 控制反转，将对象的创建进行反转，常规情况下，对象都是 开发者手动创建的，使用 IoC 开发者不再需要创建对象，而是由 IoC 容器根据需求自动创建项目所需要的对象。不用 IoC：所有对象开发者自己创建使用 IoC：对象不用开发者创建，而是交给 Spring 框架来完成">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring核心Ioc和aop">
+<meta property="og:url" content="http://example.com/2022/07/01/Spring%E6%A0%B8%E5%BF%83Ioc%E5%92%8Caop-iocaop/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Spring核心Ioc和aop 通过xml文件的方式实现Ioc IoC是 Spring全家桶各个功能模块的基础，创建对象的容器。 控制反转，将对象的创建进行反转，常规情况下，对象都是 开发者手动创建的，使用 IoC 开发者不再需要创建对象，而是由 IoC 容器根据需求自动创建项目所需要的对象。不用 IoC：所有对象开发者自己创建使用 IoC：对象不用开发者创建，而是交给 Spring 框架来完成">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-07-01T02:43:19.706Z">
+<meta property="article:modified_time" content="2022-07-01T13:16:49.860Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="Spring">
+<meta name="twitter:card" content="summary"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2022/07/01/Spring%E6%A0%B8%E5%BF%83Ioc%E5%92%8Caop-iocaop/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Spring核心Ioc和aop',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2022-07-01 21:16:49'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">13</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">9</div></a></div><hr/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Hexo</a></span><div id="menus"><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Spring核心Ioc和aop</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-07-01T02:43:19.706Z" title="Created 2022-07-01 10:43:19">2022-07-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2022-07-01T13:16:49.860Z" title="Updated 2022-07-01 21:16:49">2022-07-01</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Java/">Java</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Spring核心Ioc和aop"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>Spring核心Ioc和aop</p>
+<p>通过xml文件的方式实现Ioc</p>
+<p>IoC是 Spring全家桶各个功能模块的基础，创建对象的容器。</p>
+<p>控制反转，将对象的创建进行反转，常规情况下，对象都是 开发者手动创建的，使用 IoC 开发者不再需要创建对象，而是由 IoC 容器根据需求自动创建项目所需要的对象。不用 IoC：所有对象开发者自己创建使用 IoC：对象不用开发者创建，而是交给 Spring 框架来完成</p>
+<p>引入相关依赖</p>
+<pre><code>        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-context&lt;/artifactId&gt;
+            &lt;version&gt;5.3.15&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
+            &lt;artifactId&gt;lombok&lt;/artifactId&gt;
+            &lt;version&gt;1.18.24&lt;/version&gt;
+        &lt;/dependency&gt;
+</code></pre>
+<p>创建实体类</p>
+<pre><code>package com.gls.entity;
+
+import lombok.Data;
+import org.springframework.stereotype.Component;
+
+/**
+ * @author guolisen
+ * @date 2022年07月01日 1:06
+ */
+@Data
+@Component
+public class DataConfig &#123;
+    private String url;
+    private String driverName;
+    private String username;
+    private String password;
+&#125;
+</code></pre>
+<p>编写XML文件</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:p=&quot;http://www.springframework.org/schema/p&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.2.xsd&quot;&gt;
+        &lt;!-- 使用设值注入方式装配Person实例 --&gt;
+        &lt;bean class=&quot;com.gls.entity.DataConfig&quot; id=&quot;config&quot;&gt;
+            &lt;property name=&quot;driverName&quot; value=&quot;Driver&quot;&gt;&lt;/property&gt;
+            &lt;property name=&quot;url&quot; value=&quot;localhost:8080&quot;&gt;&lt;/property&gt;
+            &lt;property name=&quot;username&quot; value=&quot;root&quot;&gt;&lt;/property&gt;
+            &lt;property name=&quot;password&quot; value=&quot;root&quot;&gt;&lt;/property&gt;
+        &lt;/bean&gt;
+&lt;/beans&gt;
+</code></pre>
+<p>class属性：用于指定Bean的来源，即创建要创建的Bean的class类（需要全限定名）；id属性：生成的bean的名字</p>
+<p>测试</p>
+<pre><code>package com.gls.controller;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+/**
+ * @author guolisen
+ * @date 2022年07月01日 1:18
+ */
+public class Test &#123;
+    public static void main(String[] args) &#123;
+        ApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(&quot;applicationContext.xml&quot;);
+        Object config = classPathXmlApplicationContext.getBean(&quot;config&quot;);
+        System.out.println(config);
+    &#125;
+&#125;
+</code></pre>
+<p>注解的方式是通过ClassPathXmlApplicationContext对象</p>
+<p>通过配置类加注解的方式实现Ioc</p>
+<p>用一个 Java 类来替代 XML 文件，把在 XML 中配置的内容放 到配置类中</p>
+<p>创建配置类</p>
+<pre><code>package com.gls.config;
+
+import com.gls.entity.DataConfig;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+/**
+ * @author guolisen
+ * @date 2022年07月01日 2:08
+ */
+@Configuration
+public class BeanConfiguration &#123;
+    //@Bean(value = &quot;config&quot;)
+    @Bean
+    public DataConfig dataConfig()&#123;
+        DataConfig dataConfig = new DataConfig();
+        dataConfig.setDriverName(&quot;Driver&quot;);
+        dataConfig.setUrl(&quot;localhost:3306/dbname&quot;);
+        dataConfig.setUsername(&quot;root&quot;);
+        dataConfig.setPassword(&quot;root&quot;);
+        return dataConfig;
+    &#125;
+
+&#125;
+</code></pre>
+<p>先通过注解@Configuration说明是一个配置类，然后在方法上标注@Bean注解，把return返回的对象注入到spring容器中</p>
+<p>测试类</p>
+<pre><code>package com.gls.controller;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+/**
+ * @author guolisen
+ * @date 2022年07月01日 1:18
+ */
+public class Test &#123;
+    public static void main(String[] args) &#123;
+        ApplicationContext classPathXmlApplicationContext = new AnnotationConfigApplicationContext(BeanConfiguration.class);
+        Object config = classPathXmlApplicationContext.getBean(&quot;dataConfig&quot;);
+        System.out.println(config);
+    &#125;
+&#125;
+</code></pre>
+<p>当配置类只有一个时，我们可以传入当前配置类的class对象，当配置类有多个时，可以用包扫描的方式</p>
+<p>通过注解加包扫描的方式实现Ioc</p>
+<p>更简单的方式，不再需要依赖于 XML 或者配置类，而是直接 将 bean 的创建交给目标类，在目标类添加注解来创建</p>
+<p>直接在实体对象中创建bean对象</p>
+<pre><code>package com.gls.entity;
+
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+/**
+ * @author guolisen
+ * @date 2022年07月01日 1:06
+ */
+@Data
+@Component
+public class DataConfig &#123;
+    @Value(&quot;localhost:3306&quot;)
+    private String url;
+    @Value(&quot;Driver&quot;)
+    private String driverName;
+    @Value(&quot;root&quot;)
+    private String username;
+    @Value(&quot;root&quot;)
+    private String password;
+&#125;
+</code></pre>
+<p>测试</p>
+<pre><code>package com.gls.controller;
+
+import com.gls.config.BeanConfiguration;
+import com.gls.entity.DataConfig;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+/**
+ * @author guolisen
+ * @date 2022年07月01日 1:18
+ */
+public class Test &#123;
+    public static void main(String[] args) &#123;
+        ApplicationContext classPathXmlApplicationContext = new AnnotationConfigApplicationContext(&quot;com.gls.config&quot;);
+        Object config = classPathXmlApplicationContext.getBean(DataConfig.class);
+        System.out.println(config);
+    &#125;
+&#125;
+</code></pre>
+<p>这里可以通过包扫描的方式发现bean</p>
+<p>自动创建对象，完成依赖注入</p>
+<p>创建实体类</p>
+<pre><code>package com.gls.entity;
+
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+/**
+ * @author guolisen
+ * @date 2022年07月01日 1:06
+ */
+@Data
+@Component
+public class DataConfig &#123;
+    @Value(&quot;localhost:3306&quot;)
+    private String url;
+    @Value(&quot;Driver&quot;)
+    private String driverName;
+    @Value(&quot;root&quot;)
+    private String username;
+    @Value(&quot;root&quot;)
+    private String password;
+    @Autowired
+    //@Qualifier(&quot;user&quot;)
+    User user;
+&#125;
+</code></pre>
+<p>@Autowired 通过类型进行注入，如果需要通过名称取值， 通过 @Qualifier 注解完成名称的映射</p>
+<p>测试</p>
+<pre><code>package com.gls.controller;
+
+import com.gls.config.BeanConfiguration;
+import com.gls.entity.DataConfig;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+/**
+ * @author guolisen
+ * @date 2022年07月01日 1:18
+ */
+public class Test &#123;
+    public static void main(String[] args) &#123;
+        ApplicationContext classPathXmlApplicationContext = new AnnotationConfigApplicationContext(&quot;com.gls.entity&quot;);
+        Object config = classPathXmlApplicationContext.getBean(DataConfig.class);
+        System.out.println(config);
+    &#125;
+&#125;
+</code></pre>
+<p>aop</p>
+<p>面向切面编程，是一种抽象化的面向对象编程，对面向对象 编程的一种补充，底层使用动态代理机制来实现 </p>
+<p>1、打印日志 </p>
+<p>2、事务</p>
+<p>3、权限处理 打印日志 </p>
+<p>业务代码和打印日志耦合起来</p>
+<p>计算器方法中，日志和业务混合在一起，AOP 要做的就是将 日志代码全部抽象出去统一进行处理，计算器方法中只保留 核心的业务代码。 做到核心业务和非业务代码的解耦合</p>
+<p>引入aspect依赖</p>
+<pre><code> &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-aspects&lt;/artifactId&gt;
+            &lt;version&gt;5.3.20&lt;/version&gt;
+  &lt;/dependency&gt;
+</code></pre>
+<p>创建切面类</p>
+<pre><code>package com.gls.aop;
+
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
+
+/**
+ * @author guolisen
+ * @date 2022年07月01日 20:33
+ */
+@Component
+@Aspect
+public class LoggerAspect &#123;
+    @Before(&quot;execution(public int com.gls.aop.CalImpl.*(..))&quot;)
+    public void before(JoinPoint joinPoint)&#123;
+       // 2、实现类添加 @Component 注解
+        String name = joinPoint.getSignature().getName();
+        System.out.println(name+&quot;方法的参数是&quot;+ Arrays.toString(joinPoint.getArgs()));
+    &#125;
+    @AfterReturning(value = &quot;execution(public int com.gls.aop.CalImpl.*(..))&quot;,returning = &quot;result&quot;)
+    public void afterReturning(JoinPoint joinPoint,Object result)&#123;
+        String name = joinPoint.getSignature().getName();
+        System.out.println(name+&quot;方法的结果是&quot;+result);
+    &#125;
+&#125;
+</code></pre>
+<p>编写接口</p>
+<pre><code>package com.gls.aop;
+
+/**
+ * @author guolisen
+ * @date 2022年07月01日 20:45
+ */
+public interface Cal &#123;
+
+    public int add(int num1, int num2);
+    public int sub(int num1, int num2);
+    public int mul(int num1, int num2);
+    public int div(int num1, int num2);
+&#125;
+</code></pre>
+<p>实现类添加 @Component 注解</p>
+<pre><code>package com.gls.aop;
+
+import org.springframework.stereotype.Component;
+
+/**
+ * @author guolisen
+ * @date 2022年07月01日 20:48
+ */
+@Component
+public class CalImpl implements Cal &#123;
+    @Override
+    public int add(int num1, int num2) &#123;
+        int result = num1 + num2;
+        return result;
+    &#125;
+    @Override
+    public int sub(int num1, int num2) &#123;
+        int result = num1 - num2;
+        return result;
+    &#125;
+    @Override
+    public int mul(int num1, int num2) &#123;
+        int result = num1 * num2;
+        return result;
+    &#125;
+    @Override
+    public int div(int num1, int num2) &#123;
+        int result = num1 / num2;
+        return result;
+    &#125;
+&#125;
+</code></pre>
+<p>配置自动扫包，开启自动生成代理对象</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans
+        xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+        xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+        xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+        xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot;
+        xmlns:p=&quot;http://www.springframework.org/schema/p&quot;
+        xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context.xsd
+http://www.springframework.org/schema/aop
+http://www.springframework.org/schema/aop/spring-aop-4.3.xsd&quot;&gt;
+    &lt;!-- 自动扫包 --&gt;
+    &lt;context:component-scan base-package=&quot;com.gls.aop&quot;&gt;&lt;/context:component-scan&gt;
+        &lt;!-- 开启自动生成代理 --&gt;
+    &lt;aop:aspectj-autoproxy&gt;&lt;/aop:aspectj-autoproxy&gt;
+&lt;/beans&gt;
+</code></pre>
+<p>测试</p>
+<pre><code>package com.gls.controller;
+
+import com.gls.aop.Cal;
+import com.gls.entity.DataConfig;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+/**
+ * @author guolisen
+ * @date 2022年07月01日 1:18
+ */
+public class Test &#123;
+    public static void main(String[] args) &#123;
+        ApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext(&quot;spring-aop.xml&quot;);
+        Cal bean = classPathXmlApplicationContext.getBean(Cal.class);
+        System.out.println(bean.add(9, 8));
+        System.out.println(bean.sub(9, 8));
+        System.out.println(bean.mul(9, 8));
+        System.out.println(bean.div(9, 8));
+    &#125;
+&#125;
+</code></pre>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="http://example.com">John Doe</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://example.com/2022/07/01/Spring%E6%A0%B8%E5%BF%83Ioc%E5%92%8Caop-iocaop/">http://example.com/2022/07/01/Spring%E6%A0%B8%E5%BF%83Ioc%E5%92%8Caop-iocaop/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Spring/">Spring</a></div><div class="post_share"><div class="social-share" data-image="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/10/20/hello-world/"><img class="prev-cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">Hello World</div></div></a></div><div class="next-post pull-right"><a href="/2022/06/10/Mybatis-Plus%E5%AD%A6%E4%B9%A0-mybatis-plus-xue-xi/"><img class="next-cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">Mybatis-Plus学习</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">John Doe</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">13</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/10/20/hello-world/" title="Hello World"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hello World"/></a><div class="content"><a class="title" href="/2022/10/20/hello-world/" title="Hello World">Hello World</a><time datetime="2022-10-20T04:56:46.768Z" title="Created 2022-10-20 12:56:46">2022-10-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/07/01/Spring%E6%A0%B8%E5%BF%83Ioc%E5%92%8Caop-iocaop/" title="Spring核心Ioc和aop"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Spring核心Ioc和aop"/></a><div class="content"><a class="title" href="/2022/07/01/Spring%E6%A0%B8%E5%BF%83Ioc%E5%92%8Caop-iocaop/" title="Spring核心Ioc和aop">Spring核心Ioc和aop</a><time datetime="2022-07-01T02:43:19.706Z" title="Created 2022-07-01 10:43:19">2022-07-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/06/10/Mybatis-Plus%E5%AD%A6%E4%B9%A0-mybatis-plus-xue-xi/" title="Mybatis-Plus学习"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Mybatis-Plus学习"/></a><div class="content"><a class="title" href="/2022/06/10/Mybatis-Plus%E5%AD%A6%E4%B9%A0-mybatis-plus-xue-xi/" title="Mybatis-Plus学习">Mybatis-Plus学习</a><time datetime="2022-06-09T16:49:46.981Z" title="Created 2022-06-10 00:49:46">2022-06-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/05/28/%E4%B9%A6%E6%BA%90-shu-yuan/" title="书源"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="书源"/></a><div class="content"><a class="title" href="/2022/05/28/%E4%B9%A6%E6%BA%90-shu-yuan/" title="书源">书源</a><time datetime="2022-05-28T15:13:18.152Z" title="Created 2022-05-28 23:13:18">2022-05-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/05/13/Docker%E5%AD%A6%E4%B9%A0-docker-xue-xi/" title="Docker学习"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Docker学习"/></a><div class="content"><a class="title" href="/2022/05/13/Docker%E5%AD%A6%E4%B9%A0-docker-xue-xi/" title="Docker学习">Docker学习</a><time datetime="2022-05-13T14:55:15.734Z" title="Created 2022-05-13 22:55:15">2022-05-13</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By John Doe</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
